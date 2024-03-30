@@ -14,6 +14,7 @@
     "clsx": "^2.1.0",
     "lucide-react": "^0.363.0",
     "next": "14.1.4",
+    "node": "^18.20.0",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.2.2",
@@ -29,5 +30,20 @@
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "postcss.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aryan-1121/Connect.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aryan-1121/Connect/issues"
+  },
+  "homepage": "https://github.com/Aryan-1121/Connect#readme"
 }
