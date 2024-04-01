@@ -1,4 +1,4 @@
-import React from 'react'
+import MeetingTypeList from '@/components/MeetingTypeList';
 
 const Home = () => {
 
@@ -24,6 +24,10 @@ const Home = () => {
 
       </div>
 
+
+
+      {/* this MeetingTypeList will be client side rendered  and this home page is server side rendered this will allow home page to load faster*/}
+      <MeetingTypeList />       
 
 
     </section>
