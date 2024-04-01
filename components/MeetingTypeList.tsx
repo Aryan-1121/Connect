@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import MeetingModal from "./MeetingModal";
 import { useUser } from "@clerk/nextjs";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
+import { useToast } from "./ui/use-toast";
 
 
 
@@ -31,13 +32,15 @@ const MeetingTypeList = () => {
 
   const [callDetail, setCallDetail] = useState<Call>();
 
+  const { toast } = useToast();
+
 
 
   const createMeeting = async () => {
     if (!client || !user) return;
     try {
       if (!values.dateTime) {
-        // toast({ title: 'Please select a date and time' });
+        toast({ title: 'Please select a date and time' });
         return;
       }
       
@@ -66,12 +69,12 @@ const MeetingTypeList = () => {
       }
 
 
-      // toast({
-      //   title: 'Meeting Created',
-      // });
+      toast({
+        title: 'Meeting Created',
+      });
     } catch (error) {
       console.error(error);
-      // toast({ title: 'Failed to create Meeting' });
+      toast({ title: 'Failed to create Meeting' });
     }
   };
 
