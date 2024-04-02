@@ -10,6 +10,7 @@ import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useToast } from "./ui/use-toast";
 import { Textarea } from "./ui/textarea";
 import ReactDatePicker from "react-datepicker";
+import { Input } from "./ui/input";
 
 
 
@@ -82,7 +83,7 @@ const MeetingTypeList = () => {
 
 
   // getting meeting link to allow user to copy it after scheduling the meeting
-  const meetingLink=`${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetail?.id}`;
+  const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetail?.id}`;
 
 
   return (
@@ -179,13 +180,31 @@ const MeetingTypeList = () => {
           className='text-center'
           handleClick={() => {
             navigator.clipboard.writeText(meetingLink);
-            toast({title:'Link copied'});
+            toast({ title: 'Link copied' });
           }}
           buttonIcon="/icons/copy.svg"
           buttonText='Copy meeting link'
 
         />
       )}
+
+
+      {/*  JOIN MEETING CARD  */}
+
+      <MeetingModal
+        isOpen={meetingState === 'isJoiningMeeting'}
+        onClose={() => setMeetingState(undefined)}
+        title="Paste link here"
+        className="text-center"
+        buttonText="Join Meeting"
+        handleClick={() => router.push(values.link)}
+      >
+        <Input
+          placeholder="Meeting link"
+          onChange={(e) => setValues({ ...values, link: e.target.value })}
+          className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
+        />
+      </MeetingModal>
 
 
     </section>)
