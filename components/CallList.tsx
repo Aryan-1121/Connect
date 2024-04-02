@@ -3,9 +3,10 @@
 import { useGetCalls } from '@/hooks/useGetCalls';
 import { Call, CallRecording } from '@stream-io/video-react-sdk';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MeetingCard from './MeetingCard';
 import Loader from './Loader';
+import { toast } from './ui/use-toast';
 
 
 
@@ -50,6 +51,41 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
                 return '';
         }
     };
+
+
+
+    //          FOR RECORDING   WE USE USEEFFECT FOR EACH CALL 
+
+    useEffect(() => {
+        // trying to fetch recordings for each  call
+        const fetchRecordings = async () => {
+            //  to handle this error we will put it in a try catch -> Error: Stream error code 9: ListRecordings failed with error: "Too many requests for user: user_2eT57XHIA9QiSvo8iUz6dy64D4m, check response headers for more information."
+            try {
+                const callData = await Promise.all(callRecordings?.map((meeting) => meeting.queryRecordings()) ?? [] );
+    
+    
+                const recordings = callData
+                    .filter(call => call.recordings.length > 0)
+                    .flatMap(call => call.recordings);
+    
+    
+                setRecordings(recordings);
+                
+            } catch (error) {
+                toast({title : 'Try again in a moment !'});
+            }
+        }
+
+        if (type === 'recordings')
+            fetchRecordings();
+
+
+    }, [type, callRecordings])
+
+
+
+
+
 
 
     const calls = getCalls();
