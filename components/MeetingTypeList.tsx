@@ -8,6 +8,8 @@ import MeetingModal from "./MeetingModal";
 import { useUser } from "@clerk/nextjs";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useToast } from "./ui/use-toast";
+import { Textarea } from "./ui/textarea";
+import ReactDatePicker from "react-datepicker";
 
 
 
@@ -26,7 +28,7 @@ const MeetingTypeList = () => {
   const router = useRouter();
 
   // before creating a meeting check if user exists (from clerk)
-  const {user} = useUser();
+  const { user } = useUser();
   const client = useStreamVideoClient();
   const [values, setValues] = useState(initialValues);
 
@@ -43,7 +45,7 @@ const MeetingTypeList = () => {
         toast({ title: 'Please select a date and time' });
         return;
       }
-      
+
       const callId = crypto.randomUUID();
       const call = client.call('default', callId);
 
@@ -52,7 +54,7 @@ const MeetingTypeList = () => {
 
       const startsAt = values.dateTime.toISOString() || new Date(Date.now()).toISOString();
       const description = values.description || 'Instant Meeting';
-      
+
       await call.getOrCreate({
         data: {
           starts_at: startsAt,
@@ -77,6 +79,10 @@ const MeetingTypeList = () => {
       toast({ title: 'Failed to create Meeting' });
     }
   };
+
+
+  // getting meeting link to allow user to copy it after scheduling the meeting
+  const meetingLink=`${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetail?.id}`;
 
 
   return (
@@ -119,6 +125,67 @@ const MeetingTypeList = () => {
         handleClick={createMeeting}
 
       />
+
+      {/* SCHEDULING  */}
+      {/* if we have dont have meeting/call details while scheduling then create meeting ...... 
+            and if we have then show a box to copy meeting link */}
+
+      {!callDetail ? (
+        <MeetingModal
+          isOpen={meetingState === 'isScheduleMeeting'}
+          onClose={() => setMeetingState(undefined)}
+          title='Create Meeting'
+          className='text-center'
+          // buttonText='Start Meeting'
+          handleClick={createMeeting}
+        >
+          {/*  a div for asking description  */}
+          <div className="flex flex-col gap-2.5">
+            <label className="text-base font-normal leading-[22.4px] text-sky-2">
+              Add a description
+            </label>
+            <Textarea
+              className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
+              onChange={(e) =>
+                setValues({ ...values, description: e.target.value })
+              }
+            />
+          </div>
+          {/* another div for selecting date and time for meeting */}
+
+
+          <div className="flex w-full flex-col gap-2.5">
+            <label className="text-base font-normal leading-[22.4px] text-sky-2">
+              Select Date and Time
+            </label>
+            <ReactDatePicker
+              selected={values.dateTime}
+              onChange={(date) => setValues({ ...values, dateTime: date! })}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              timeCaption="time"
+              dateFormat="MMMM d, yyyy h:mm aa"
+              className="w-full rounded bg-dark-3 p-2 focus:outline-none"
+            />
+          </div>
+
+        </MeetingModal>
+      ) : (
+        <MeetingModal
+          isOpen={meetingState === 'isScheduleMeeting'}
+          onClose={() => setMeetingState(undefined)}
+          title='Meeting Created'
+          className='text-center'
+          handleClick={() => {
+            navigator.clipboard.writeText(meetingLink);
+            toast({title:'Link copied'});
+          }}
+          buttonIcon="/icons/copy.svg"
+          buttonText='Copy meeting link'
+
+        />
+      )}
 
 
     </section>)

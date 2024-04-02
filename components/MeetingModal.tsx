@@ -68,6 +68,8 @@ const MeetingModal = ({ isOpen, onClose, title, className, children, handleClick
                         )}{" "}
                         &nbsp;
                         {/* &nbsp is for extra space */}
+
+                        {/* if we are not giving buttonText in MeetingModal Component then use buttonText as Schedule Meeting byDefault */}
                         {buttonText || "Schedule Meeting"}
                     </Button>
 
