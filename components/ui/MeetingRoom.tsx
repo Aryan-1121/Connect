@@ -3,7 +3,9 @@ import { CallControls, CallParticipantsList, CallStatsButton, PaginatedGridLayou
 import { useState } from 'react';
 
 import {DropdownMenu,DropdownMenuContent,DropdownMenuItem,DropdownMenuLabel,DropdownMenuSeparator,DropdownMenuTrigger} from "@/components/ui/dropdown-menu"
-import { LayoutList } from 'lucide-react';
+import { LayoutList, Users } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import EndCallButton from '../EndCallButton';
 
 
 
@@ -14,9 +16,15 @@ type CallLayoutType = 'grid' | 'speaker-left' | 'speaker-right';
 
 const MeetingRoom = () => {
 
-  const [layOut, setlayOut] = useState<CallLayoutType>('speaker-left');
-
+  
   const [showParticipants, setShowParticipants] = useState(false);
+  
+  const [layOut, setlayOut] = useState<CallLayoutType>('speaker-left');
+  
+  
+  // if it is a personal room then true else false  -> !!
+  const searchParams = useSearchParams();
+  const isPersonalRoom = !!searchParams.get('personal');      // getting personal query from url
 
 
   //    now since we know the type so we can create a new functional component which will render a specific layout depending upon the current layout state
@@ -77,6 +85,14 @@ const MeetingRoom = () => {
         </DropdownMenu>
         <CallStatsButton />
 
+
+        <button onClick={() => setShowParticipants((prev) => !prev)}>
+          <div className=" cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]  ">
+            <Users size={20} className="text-white" />
+          </div>
+        </button>
+
+        {!isPersonalRoom && <EndCallButton />}
 
       </div>
     </section>
