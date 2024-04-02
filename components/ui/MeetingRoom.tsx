@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import {DropdownMenu,DropdownMenuContent,DropdownMenuItem,DropdownMenuLabel,DropdownMenuSeparator,DropdownMenuTrigger} from "@/components/ui/dropdown-menu"
 import { LayoutList, Users } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import EndCallButton from '../EndCallButton';
 import Loader from '../Loader';
 
@@ -17,7 +17,7 @@ type CallLayoutType = 'grid' | 'speaker-left' | 'speaker-right';
 
 const MeetingRoom = () => {
 
-  
+  const router = useRouter();
   const [showParticipants, setShowParticipants] = useState(false);
   
   const [layOut, setlayOut] = useState<CallLayoutType>('speaker-left');
@@ -73,7 +73,8 @@ const MeetingRoom = () => {
       </div>
       {/* video layout and call controls */}
       <div className="fixed bottom-0 flex w-full items-center justify-center gap-5 flex-wrap">
-        <CallControls />
+            {/* when click on leave button route to home page   */}
+        <CallControls onLeave={() => router.push('/')}/>    
 
           {/*  dropdown to change layout coming from shadcn */}
 
