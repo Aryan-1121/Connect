@@ -28,6 +28,10 @@ const Meeting = () => {
       <StreamCall call={call}>
         <StreamTheme>
 
+          {/* if meeting setup(video + mic ) is not done then first send the control to Meeting setUp where user will get the preview and setUp options for mic and camera  */}
+
+          {/* else if setUp is done/completed then forward to Meeting room   */}
+          
         {!isSetupComplete ? (
           <MeetingSetup setIsSetupComplete={setIsSetupComplete} />
         ) : (
